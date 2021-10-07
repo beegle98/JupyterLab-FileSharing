@@ -26,7 +26,7 @@
   "style": "style/index.css",
   "repository": {
     "type": "git",
-    "url": "https://github.com/beegle98/JupyterLab-FileSharing.git"
+    "url": "https://github.com/beegle98/JupyterLab_FileSharing.git"
   },
   "scripts": {
     "build": "jlpm run build:lib && jlpm run build:labextension:dev",

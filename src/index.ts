@@ -7,22 +7,32 @@ import { showDialog, Dialog } from '@jupyterlab/apputils';
 import { buildIcon } from '@jupyterlab/ui-components';
 
 const extension: JupyterFrontEndPlugin<void> = {
-  id: 'context-menu',
+  id: 'context-menus',
   autoStart: true,
   requires: [IFileBrowserFactory],
   activate: (app: JupyterFrontEnd, factory: IFileBrowserFactory) => {
-    app.commands.addCommand('jlab-examples/context-menu:open', {
-      label: 'Share file',
+    app.commands.addCommand('context-menu:open', {
+      label: 'Share files',
       caption: "Example context menu button for file browser's items.",
       icon: buildIcon,
       execute: () => {
-        const file = factory.tracker.currentWidget.selectedItems().next();
+        factory.tracker.currentWidget!.selectedItems
+        const file = factory.tracker.currentWidget?.selectedItems().next();
 
         showDialog({
-          title: 'Share file : ' + file.name, 
-          body: 'Share file with professor',
-          buttons: [Dialog.okButton()],
-        }).catch((e) => console.log(e));
+          title: 'Share file : ' + file?.name, 
+          body: 'Share file with professor : '+ file?.path,
+          buttons: [
+            Dialog.okButton({label : 'Share'}),
+            Dialog.cancelButton()
+          ],
+          
+        }).then(result => {
+          if(result.button.accept){
+            console.log(file?.name + " Share Success ");
+          }
+        });
+        
       },
     });
   },

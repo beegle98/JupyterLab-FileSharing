@@ -2,6 +2,15 @@
   "jupyter.lab.shortcuts": [],
   "title": "JupyterLab_FileSharing",
   "description": "JupyterLab_FileSharing settings.",
+  "jupyter.lab.menus": {
+    "context": [
+      {
+        "command": "context-menu:open",
+        "selector": ".jp-DirListing-item[data-isdir=\"false\"]",
+        "rank": 0
+      }
+    ]
+  },
   "type": "object",
   "properties": {},
   "additionalProperties": false
