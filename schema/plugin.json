@@ -1,0 +1,8 @@
+{
+  "jupyter.lab.shortcuts": [],
+  "title": "JupyterLab_FileSharing",
+  "description": "JupyterLab_FileSharing settings.",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
