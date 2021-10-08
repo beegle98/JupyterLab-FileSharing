@@ -12,22 +12,8 @@ const extension: JupyterFrontEndPlugin<void> = {
   requires: [IFileBrowserFactory],
   activate: (app: JupyterFrontEnd, factory: IFileBrowserFactory) => {
     app.commands.addCommand('context-menu:open', {
-      label: 'Share files',
-      caption: "context menu button for file browser's items.",
-      icon: buildIcon,
-      execute: () => {
-        const file = factory.tracker.currentWidget?.selectedItems().next();
+      /*id select 필요없을 예정
         const options = ['one', 'two', 'three']
-
-        InputDialog.getText({
-          title : 'example',
-
-        }).then(result =>{
-          if(result.button.accept){
-            console.log(result.value);
-          }
-        })
-        
         InputDialog.getItem({
           title : 'example',
           items : options,
@@ -39,7 +25,26 @@ const extension: JupyterFrontEndPlugin<void> = {
             console.log(result.value);            
             
           }
+        })*/
+
+      //addcommand 삭제 커맨드나 더 찾아보기
+      //커맨드 있는지 확인후 생성
+
+      label: 'Share files',
+      caption: "context menu button for file browser's items.",
+      icon: buildIcon,
+      execute: () => {
+        const file = factory.tracker.currentWidget?.selectedItems().next();
+        
+        InputDialog.getText({
+          title : 'Please enter the URL',
+          
+        }).then(result =>{
+          if(result.button.accept){
+            console.log(result.value);
+          }
         })
+        
         showDialog({
           
           title: 'Share file : ' + file?.name, 
