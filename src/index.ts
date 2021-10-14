@@ -12,6 +12,7 @@ const extension: JupyterFrontEndPlugin<void> = {
   requires: [IFileBrowserFactory],
   activate: (app: JupyterFrontEnd, factory: IFileBrowserFactory) => {
     app.commands.addCommand('context-menu:open', {
+      
       /*id select 필요없을 예정
         const options = ['one', 'two', 'three']
         InputDialog.getItem({
@@ -26,7 +27,15 @@ const extension: JupyterFrontEndPlugin<void> = {
             
           }
         })*/
-
+        /*
+            fetch('url',{
+              method : 'post',
+              headers : {'Content-Type' : 'application/json'},
+              body : JSON.stringify({
+                // JSON 형식으로 데이터를 전송
+              })
+            }).then(res => res.json())
+        */  
       //addcommand 삭제 커맨드나 더 찾아보기
       //커맨드 있는지 확인후 생성
 
@@ -35,13 +44,15 @@ const extension: JupyterFrontEndPlugin<void> = {
       icon: buildIcon,
       execute: () => {
         const file = factory.tracker.currentWidget?.selectedItems().next();
-        
+        var input_url : any;
+
         InputDialog.getText({
           title : 'Please enter the URL',
           
         }).then(result =>{
           if(result.button.accept){
-            console.log(result.value);
+            input_url = result.value
+            console.log("inputURL : " + input_url);
           }
         })
         
@@ -56,7 +67,18 @@ const extension: JupyterFrontEndPlugin<void> = {
           
         }).then(result => {
           if(result.button.accept){
-            console.log(file?.name + " Share Success ");
+            console.log( "URL : " + input_url +"\n"+ "Shared the file :" + file?.content );
+            let send_file = new FormData();
+            send_file.append('file', file?.content);
+            
+            fetch('/fileSharing',{
+              method : 'post',
+              headers : {},
+              body : send_file
+
+            }).then(res => res.json())
+            .then(res => console.log(res))
+            .catch(e => console.log(e))
           }
         }).catch((e) => console.log(e));
         
