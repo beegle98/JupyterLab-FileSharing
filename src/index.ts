@@ -7,12 +7,14 @@ import { showDialog, Dialog, InputDialog } from '@jupyterlab/apputils';
 import { buildIcon } from '@jupyterlab/ui-components';
 
 const extension: JupyterFrontEndPlugin<void> = {
-  id: 'context-menus',
+  id: 'ShareFile-context-menu',
   autoStart: true,
   requires: [IFileBrowserFactory],
+  
   activate: (app: JupyterFrontEnd, factory: IFileBrowserFactory) => {
-    app.commands.addCommand('context-menu:open', {
+    app.commands.addCommand('ShareFile-context-menu:open', {
       
+     
       /*id select 필요없을 예정
         const options = ['one', 'two', 'three']
         InputDialog.getItem({
@@ -35,15 +37,16 @@ const extension: JupyterFrontEndPlugin<void> = {
                 // JSON 형식으로 데이터를 전송
               })
             }).then(res => res.json())
-        */  
-      //addcommand 삭제 커맨드나 더 찾아보기
-      //커맨드 있는지 확인후 생성
-
-      label: 'Share files',
+          */
+      
+      
+      label: 'Share file',
       caption: "context menu button for file browser's items.",
       icon: buildIcon,
       execute: () => {
-        const file = factory.tracker.currentWidget?.selectedItems().next();
+
+        console.log("Click the 'share file' button");
+        const file = factory.tracker.currentWidget.selectedItems().next();
         var input_url : any;
 
         InputDialog.getText({
@@ -53,37 +56,38 @@ const extension: JupyterFrontEndPlugin<void> = {
           if(result.button.accept){
             input_url = result.value
             console.log("inputURL : " + input_url);
+
+            showDialog({
+          
+              title: 'Share file : ' + file.name, 
+              body: 'Share file with professor : '+ file.path,
+              buttons: [
+                Dialog.okButton({label : 'Share'}),
+                Dialog.cancelButton()
+              ],
+              
+            }).then(result => {
+              if(result.button.accept){
+                console.log( "URL : " + input_url +"\n"+ "Shared the file :" + file.content );
+                let send_file = new FormData();
+                send_file.append('file', file.content);
+                
+                fetch('/fileSharing',{
+                  method : 'post',
+                  headers : {},
+                  body : send_file
+    
+                }).then(res => res.json())
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+              }
+            }).catch((e) => console.log(e));
           }
         })
-        
-        showDialog({
-          
-          title: 'Share file : ' + file?.name, 
-          body: 'Share file with professor : '+ file?.path,
-          buttons: [
-            Dialog.okButton({label : 'Share'}),
-            Dialog.cancelButton()
-          ],
-          
-        }).then(result => {
-          if(result.button.accept){
-            console.log( "URL : " + input_url +"\n"+ "Shared the file :" + file?.content );
-            let send_file = new FormData();
-            send_file.append('file', file?.content);
-            
-            fetch('/fileSharing',{
-              method : 'post',
-              headers : {},
-              body : send_file
-
-            }).then(res => res.json())
-            .then(res => console.log(res))
-            .catch(e => console.log(e))
-          }
-        }).catch((e) => console.log(e));
-        
       },
+
     });
+    
   },
 };
 
