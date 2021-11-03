@@ -7,12 +7,12 @@ import { showDialog, Dialog, InputDialog } from '@jupyterlab/apputils';
 import { buildIcon } from '@jupyterlab/ui-components';
 
 const extension: JupyterFrontEndPlugin<void> = {
-  id: 'ShareFile-context-menu',
+  id: 'context-menu',
   autoStart: true,
   requires: [IFileBrowserFactory],
   
   activate: (app: JupyterFrontEnd, factory: IFileBrowserFactory) => {
-    app.commands.addCommand('ShareFile-context-menu:open', {
+    app.commands.addCommand('FileSharing/context-menu:open', {
       
      
       /*id select 필요없을 예정
@@ -46,7 +46,12 @@ const extension: JupyterFrontEndPlugin<void> = {
       execute: () => {
 
         console.log("Click the 'share file' button");
-        const file = factory.tracker.currentWidget.selectedItems().next();
+        const widget = factory.tracker.currentWidget;
+        const file = widget.selectedItems().next();
+        
+        console.log('file: ' + file);
+
+
         var input_url : any;
 
         InputDialog.getText({
@@ -68,10 +73,16 @@ const extension: JupyterFrontEndPlugin<void> = {
               
             }).then(result => {
               if(result.button.accept){
-                console.log( "URL : " + input_url +"\n"+ "Shared the file :" + file.content );
+                console.log( "URL : " + input_url +"\n"+ "Shared the file :" + file.name );
                 let send_file = new FormData();
-                send_file.append('file', file.content);
                 
+                
+                send_file.append('file',
+                new Blob([file.path], {type: 'multipart/form-data'})
+                ,file.name);
+                send_file.append('url',
+                new Blob([JSON.stringify(input_url)], { type: 'application/json' })
+                );
                 fetch('/fileSharing',{
                   method : 'post',
                   headers : {},
