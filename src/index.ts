@@ -49,9 +49,9 @@ const extension: JupyterFrontEndPlugin<void> = {
         const widget = factory.tracker.currentWidget;
         const file = widget.selectedItems().next();
         
-        console.log('file: ' + file);
+        console.log('file: ' + file.path);
 
-
+        
         var input_url : any;
 
         InputDialog.getText({
@@ -78,14 +78,16 @@ const extension: JupyterFrontEndPlugin<void> = {
                 
                 
                 send_file.append('file',
-                new Blob([file.path], {type: 'multipart/form-data'})
+                new Blob([file.mimetype], {type: 'multipart/form-data'})
                 ,file.name);
                 send_file.append('url',
-                new Blob([JSON.stringify(input_url)], { type: 'application/json' })
+                new Blob([JSON.stringify({"url": input_url})], { type: 'application/json' })
                 );
-                fetch('/fileSharing',{
+
+                
+                fetch('http://localhost:3000/file/upload',{
                   method : 'post',
-                  headers : {},
+                  headers : {'Content-Type': 'application/x-www-form-urlencoded'},
                   body : send_file
     
                 }).then(res => res.json())
