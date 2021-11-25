@@ -21,11 +21,12 @@ const extension: JupyterFrontEndPlugin<void> = {
         console.log("Click the 'share file' button");
         const widget = factory.tracker.currentWidget;
         const file = widget.selectedItems().next();
-        
+        const downloadLink = '?_xsrf=2%7C6cc81390%7C5bb85f06295e2c5df9b85c1ac96ce502%7C1635325547';
+
         let input_url : string;
         
         InputDialog.getText({
-          title : 'Please enter the URL',
+          title : 'Please enter the Destination URL',
           
         }).then(result =>{
           if(result.button.accept){
@@ -60,7 +61,7 @@ const extension: JupyterFrontEndPlugin<void> = {
                 let uploadFile = new FormData();
 
                 console.log('http://localhost:8888/lab/tree/' + file.path);
-                fetch('http://localhost:8888/files/' + file.path +'?_xsrf=2%7C6cc81390%7C5bb85f06295e2c5df9b85c1ac96ce502%7C1635325547')
+                fetch('http://localhost:8888/files/' + file.path + downloadLink)
                 .then(res => res.blob())
                 .then(function(myblob){
                   console.log("Size: " + myblob.size);
