@@ -4,6 +4,44 @@
 
 jupyterlab fileSharing extension
 
+## 개요
+
+2021-2 자기주도 프로젝트로 JupyterLab-Extesion 개발을 진행하였습니다.
+
+## JupyterLab_FileSharing 소개
+
+Jupyter Lab을 사용해 온라인 실습하는 사람들을 위한 Jupyter Lab Extension을 개발하였습니다. 학생과 교수 사이에 파일을 손쉽게 공유할 수 있게하여 온라인으로 실습을 하더라도 원할때마다 파일을 공유하여 진행이 막히지 않고 원할하게 진행되도록 돕는 확장기능입니다. 코드를 작성하다가 파일을 공유하고 싶으면 해당 파일을 우클릭 후 'Share File' 버튼을 클릭해 손쉽게 파일을 공유할 수 있습니다.
+
+## 개발 환경 및 라이브러리
+
+- Conda Jupyter Lab 가상환경 설치
+- Initialize the project from a __cookiecutter__
+- TypeScript
+- jupyterlab/application, jupyterlab/filebrowser, jupyterlab/apputils, jupyterlab/ui-components
+- Back-End : Express(Node.js), multer, fs, CORS
+
+
+## 주요 기능
+1. 공유하고자 하는 파일 우클릭 후 'Share File'버튼 클릭.
+2. 공유할 대상의 URL 입력 후 확인.
+3. 해당 파일 공유
+
+
+## JupyterLab Extension 시작하기
+1. https://jupyterlab.readthedocs.io/en/stable/extension/extension_tutorial.html
+
+    JupyterLab Extension 공식 튜토리얼 링크입니다.
+
+    확장기능 개발을 시작하고 싶으신 분은 위 사이트로 가셔서 튜토리얼을 해보시면 도움이 될겁니다.
+    Conda 가상환경 설치부터 프로젝트 시작, 간단한 이미지 출력까지 해보실 수 있습니다.
+
+2. https://github.com/jupyterlab/extension-examples
+
+    JupyterLab Extension 기본 예시들을 구현해놓은 깃헙 주소입니다. 각종 예시들이 잘 정리되어 있어 참고하기 좋습니다.
+
+
+## JupyterLab_FileSharing Backend GitHub
+https://github.com/beegle98/FileSharing_backend
 
 
 ## Requirements
