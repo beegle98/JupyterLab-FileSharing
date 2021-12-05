@@ -21,7 +21,6 @@ const extension: JupyterFrontEndPlugin<void> = {
         console.log("Click the 'share file' button");
         const widget = factory.tracker.currentWidget;
         const file = widget.selectedItems().next();
-
         const downloadLink = '?_xsrf=2%7C6cc81390%7C5bb85f06295e2c5df9b85c1ac96ce502%7C1635325547';
 
         let input_url : string;
@@ -34,6 +33,7 @@ const extension: JupyterFrontEndPlugin<void> = {
             input_url = result.value
 
             showDialog({
+          
               title: 'Share file : ' + file.name, 
               body: 'Share file with professor : '+ file.path,
               buttons: [
@@ -45,6 +45,18 @@ const extension: JupyterFrontEndPlugin<void> = {
               if(result.button.accept){
 
                 console.log( "URL : " + input_url +"\n"+ "Shared the file :" + file.name );
+
+
+                fetch('http://localhost:3000/uploadURL',{
+                  method : 'post',
+                  headers : {'Content-Type' : 'application/json'},                 
+                  body : JSON.stringify({
+                    fileName : file.name,
+                    url : input_url
+                  })
+                }).then(res => res.json())
+                .then(res => console.log(res))
+
                 
                 let uploadFile = new FormData();
 
@@ -56,7 +68,7 @@ const extension: JupyterFrontEndPlugin<void> = {
                   console.log("type: \n" + myblob.type);
                   uploadFile.append('File',myblob, file.name);
                   
-                fetch(input_url+'/uploadFile',{
+                fetch('http://localhost:3000/uploadFile',{
                   method : 'post',
                   headers : {},
                   body : uploadFile
